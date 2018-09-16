@@ -8,6 +8,7 @@ phases:
     - apk add --update nodejs
     - apk add npm
     - npm install -g serverless
+    - pip install --upgrade awscli
 
   pre_build:
     commands:
