@@ -49,3 +49,7 @@ This link will be used by default to generate the short URL.
 ## Route 53 configuration 
 Once you have your API gateway and S3 buckets in place, you should create domains names in route 53 for your static website 
 (must match the domain name you gave to the serverless application) and  the api gateway domain.
+
+## Creating a Build/Deploy service for your application
+I've included a `code-build-cicd_cfn.yml` template in the infrastructure directory. This template creates a CodeBuild service
+linked to your GitHub repo and deploys it for you! 
