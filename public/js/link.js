@@ -20,6 +20,7 @@ window.addEventListener("load", function () {
         // Define what happens in case of error
         XHR.addEventListener("error", function(event) {
             alert('Oops! Something went wrong.');
+            document.getElementById("response").innerHTML = "";
         });
 
         // Set up our request
@@ -39,5 +40,6 @@ window.addEventListener("load", function () {
     form.addEventListener("submit", function (event) {
         event.preventDefault();
         sendData();
+        document.getElementById("response").innerHTML = "<img class='loading' src='images/loading.gif'>";
     });
 });

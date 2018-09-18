@@ -2208,6 +2208,10 @@ img {
     max-width: 100%
 }
 
+#response img {
+    max-width: 5%
+}
+
 .content {
     font-style: italic
 }
