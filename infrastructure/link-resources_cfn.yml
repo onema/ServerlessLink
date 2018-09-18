@@ -26,6 +26,9 @@ Parameters:
     Default: 1
     Description: Dynamo write capacity units
     Type: Number
+  StageName:
+    Type: String
+    Default: ${self:custom.stageName}
 
 Resources:
   WebsiteBucket:
@@ -120,6 +123,41 @@ Resources:
       TimeToLiveSpecification:
         AttributeName: ExpirationTime
         Enabled: true
+
+  AcmDomainCertificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      ValidationMethod: DNS
+      DomainName:
+        Fn::Join: [".", ["m", Ref: DomainName]]
+
+  ApiGatewayDomain:
+    Type: AWS::ApiGateway::DomainName
+    Properties:
+      # Use if you want it to create a cloudfront distribution
+#      CertificateArn:
+#        Ref: AcmDomainCertificate
+#      EndpointConfiguration:
+#        Types:
+#          - EDGE
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+      RegionalCertificateArn:
+        Ref: AcmDomainCertificate
+      DomainName:
+        Fn::Join: [".", ["m", Ref: DomainName]]
+
+  DomainMapping:
+    Type: AWS::ApiGateway::BasePathMapping
+    Properties:
+      BasePath: ""
+      Stage:
+        Ref: StageName
+      DomainName:
+        Ref: ApiGatewayDomain
+      RestApiId:
+       Ref: ApiGatewayRestApi
 
 Outputs:
   EventsJsonArchive:
