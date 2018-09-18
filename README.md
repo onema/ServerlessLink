@@ -53,12 +53,17 @@ Serverless will use the file `infrastructure/link-resources_cfn.yml` and generat
 aws s3 cp ./public/ s3://<DOMAIN_NAME> --recursive
 ```
 
+### DNS Setup
+Once you have properly setup the application you need to add two DNS records for your applicaiton and the API.
+In Route 53, create an `A` or `CNAME` record using an *Alias* for your bucket. This name must match the bucket name which 
+is named after the parameter that you passed to the serverless application above `<DOMAIN_NAME>`.
+
+The second is a `CNAME` record to the API Gateway named `m.<DOMAIN_NAME>`.
+
+
 ## Application configuration
 The application needs a `config.js` file. You can copy the `public/js/dist.config.js` to `public/js/config.js`. At this time
-all you need to fill in is the name of the `invokeUrl` which is the URL of your API, and the scheme, this should be `https`.
-
-> **NOTE**: 
->
+all you need to fill in is the name of the `invokeUrl` which is the URL of your API `m.<DOMAIN_NAME>`, and the scheme, this should be `https`.
 
 ## Route 53 configuration 
 Once you have your API gateway and S3 buckets in place, you should create domains names in route 53 for your static website 
