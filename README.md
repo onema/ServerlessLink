@@ -9,10 +9,13 @@ and deployed using the [serverless framework](https://serverless.com).
 **Checkout the [ServerlessLink](http://serverless.link) website for a demo!**
 
 ## Requirements
-1. python `3.6+` ([download](https://www.python.org/downloads/))
-  * This is used to install the AWS CLI and move the website assets into the S3 bucket
 1. java JDK `8+` ([download](https://www.java.com/en/download/))
 1. sbt `1+` ([install](https://www.scala-sbt.org/1.0/docs/Setup.html))
+1. Serverless Framework `1.30+` ([install](https://serverless.com/framework/docs/getting-started/))
+
+#### Optional
+1. python `3.6+` ([download](https://www.python.org/downloads/))
+  * This is used to install the AWS CLI and move the website assets into the S3 bucket
 
 ### Using docker
 Alternatively you can use the `onema/userverless-build` docker container to build and deploy your application:
@@ -29,7 +32,7 @@ sbt assembly
 
 ### Deploy the code using serverless
 
-```bash
+```
 serverless deploy --domain <DOMAIN_NAME>
 ```
 The <DOMAIN_NAME> is the domain you will be using for your application. This will create a bucket with the given domain name. 
