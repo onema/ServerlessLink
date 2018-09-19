@@ -4,7 +4,6 @@ import java.net.UnknownHostException
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsync
 import com.amazonaws.services.dynamodbv2.model.{AttributeValue, PutItemResult}
-import com.sun.net.httpserver.Authenticator.Success
 import com.typesafe.scalalogging.Logger
 import io.onema.userverless.exception.HandleRequestException
 import org.apache.http.HttpStatus
@@ -31,7 +30,7 @@ class CreateLogic(val dynamodbClient: AmazonDynamoDBAsync, val tableName: String
   def testLink(link: String): Unit = {
     Try(Source.fromURL(link)) match {
       case Success(_) =>
-      case Failure(ex: UnknownHostException) => throw new HandleRequestException(HttpStatus.SC_BAD_REQUEST, s"The URL $link is not valid")
+      case Failure(_) => throw new HandleRequestException(HttpStatus.SC_BAD_REQUEST, s"The URL $link is not valid")
     }
   }
 
