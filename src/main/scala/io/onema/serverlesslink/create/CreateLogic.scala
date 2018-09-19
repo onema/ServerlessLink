@@ -1,9 +1,17 @@
 package io.onema.serverlesslink.create
 
+import java.net.UnknownHostException
+
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsync
 import com.amazonaws.services.dynamodbv2.model.{AttributeValue, PutItemResult}
+import com.sun.net.httpserver.Authenticator.Success
 import com.typesafe.scalalogging.Logger
+import io.onema.userverless.exception.HandleRequestException
+import org.apache.http.HttpStatus
+
 import scala.collection.JavaConverters._
+import scala.io.Source
+import scala.util.{Failure, Success, Try}
 
 
 class CreateLogic(val dynamodbClient: AmazonDynamoDBAsync, val tableName: String) {
@@ -18,6 +26,13 @@ class CreateLogic(val dynamodbClient: AmazonDynamoDBAsync, val tableName: String
     val linkId = hash.take(4)
     recordLink(linkId, value)
     linkId
+  }
+
+  def testLink(link: String): Unit = {
+    Try(Source.fromURL(link)) match {
+      case Success(_) =>
+      case Failure(ex: UnknownHostException) => throw new HandleRequestException(HttpStatus.SC_BAD_REQUEST, s"The URL $link is not valid")
+    }
   }
 
   def makeLinkId(value: String): String = {
