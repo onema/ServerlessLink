@@ -19,8 +19,9 @@ window.addEventListener("load", function () {
 
         // Define what happens in case of error
         XHR.addEventListener("error", function(event) {
-            var obj = JSON.parse(event.target.responseText);
             alert('Oops! Something went wrong. ');
+            document.getElementById("response").innerHTML = "";
+            var obj = JSON.parse(event.target.responseText);
             document.getElementById("response").innerHTML = obj.message;
         });
 
