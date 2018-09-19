@@ -21,8 +21,6 @@ window.addEventListener("load", function () {
         XHR.addEventListener("error", function(event) {
             alert('Oops! Something went wrong. ');
             document.getElementById("response").innerHTML = "";
-            var obj = JSON.parse(event.target.responseText);
-            document.getElementById("response").innerHTML = obj.message;
         });
 
         // Set up our request
