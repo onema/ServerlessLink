@@ -20,6 +20,7 @@ class CreateLogic(val dynamodbClient: AmazonDynamoDBAsync, val tableName: String
 
   //--- Methods ---
   def process(value: String): String = {
+    testLink(value)
     val hash = makeLinkId(value)
     log.info(s"HASH: $hash")
     val linkId = hash.take(4)
