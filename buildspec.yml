@@ -6,6 +6,7 @@ phases:
     - ls -la
     - java -version
     - echo "${CODEBUILD_SOURCE_VERSION}"
+    - cp serverless.yml.dist serverless.yml
 
   build:
     commands:
