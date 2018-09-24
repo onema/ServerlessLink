@@ -9,12 +9,13 @@ import io.onema.userverless.configuration.cors.{CorsConfiguration, EnvCorsConfig
 import io.onema.userverless.configuration.lambda.EnvLambdaConfiguration
 import io.onema.userverless.exception.HandleRequestException
 import io.onema.userverless.function.ApiGatewayHandler
+import io.onema.userverless.function.ApiGatewayHandler.Cors
 import org.apache.http.HttpStatus
 
 import scala.util.{Failure, Success, Try}
 
 
-class CreateFunction extends ApiGatewayHandler with EnvLambdaConfiguration {
+class CreateFunction extends ApiGatewayHandler with Cors with EnvLambdaConfiguration {
 
   //--- Fields ---
   private val dynamo = AmazonDynamoDBAsyncClientBuilder.defaultClient()

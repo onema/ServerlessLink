@@ -19,7 +19,7 @@ class ResolveFunction extends ApiGatewayHandler with EnvLambdaConfiguration {
   val logic = new ResolveLogic(dynamo, tableName)
 
   //--- Methods ---
-  override def corsConfiguration(origin: Option[String]): CorsConfiguration = EnvCorsConfiguration(origin)
+  def corsConfiguration(origin: Option[String]): CorsConfiguration = EnvCorsConfiguration(origin)
 
   def execute(request: AwsProxyRequest, context: Context): AwsProxyResponse = {
     val map = request.getPathParameters.asScala

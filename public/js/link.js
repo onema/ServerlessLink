@@ -14,6 +14,7 @@ window.addEventListener("load", function () {
         XHR.addEventListener("load", function(event) {
             // alert(event.target.responseText);
             var obj = JSON.parse(event.target.responseText);
+            documetn.getElementById("responseCopyButton").innerHTML = "<button onclick=\"copy()\">Copy URL</button>";
             document.getElementById("response").innerHTML = _config.api.scheme + "://" + obj.url;
         });
 
@@ -31,6 +32,20 @@ window.addEventListener("load", function () {
 
         var location = XHR.getResponseHeader("location");
         console.log(location)
+    }
+
+    function copy() {
+        /* Get the text field */
+        var copyText = document.getElementById("response");
+
+        /* Select the text field */
+        copyText.select();
+
+        /* Copy the text inside the text field */
+        document.execCommand("copy");
+
+        /* Alert the copied text */
+        alert("Copied URL: " + copyText.value);
     }
 
     // Access the form element...

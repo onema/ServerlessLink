@@ -19,7 +19,7 @@ provider:
     CORS_SITES: "http://${opt:domain},https://${opt:domain}"
 
     # The error topic is part of the bootstrap infrastructure for uServerless
-    # SNS_ERROR_TOPIC: ${file(infrastructure/global-values.yml):environment.SNS_ERROR_TOPIC}
+    SNS_ERROR_TOPIC: ${file(infrastructure/global-values.yml):environment.SNS_ERROR_TOPIC}
 
 # Custom values. These can be referenced in the Cloud Formation template
 custom: ${file(infrastructure/global-values.yml):custom}
@@ -34,7 +34,7 @@ functions:
   serverlesslink-resolve:
     handler: io.onema.serverlesslink.resolve.ResolveFunction::lambdaHandler
     # the DLQ is part of the bootstrap infrastructure for uServerless
-    # onError: ${file(infrastructure/global-values.yml):deadLetterQueue}
+    onError: ${file(infrastructure/global-values.yml):deadLetterQueue}
     environment:
       TABLE_NAME:
         Ref: TableName
@@ -42,15 +42,15 @@ functions:
       - http:
           path: /{id}
           method: get
-#      - schedule:
-#          rate: rate(10 minutes)
-#          input:
-#            warmup: true
+      - schedule:
+          rate: rate(2 minutes)
+          input:
+            warmup: true
 
   serverlesslink-create:
     handler: io.onema.serverlesslink.create.CreateFunction::lambdaHandler
     # the DLQ is part of the bootstrap infrastructure for uServerless
-    # onError: ${file(infrastructure/global-values.yml):deadLetterQueue}
+    onError: ${file(infrastructure/global-values.yml):deadLetterQueue}
     environment:
       TABLE_NAME:
         Ref: TableName
@@ -59,10 +59,10 @@ functions:
           path: /
           method: post
           cors: true
-#      - schedule:
-#          rate: rate(10 minutes)
-#          input:
-#            warmup: true
+      - schedule:
+          rate: rate(2 minutes)
+          input:
+            warmup: true
 
 # you can add CloudFormation resource templates here
 resources:
