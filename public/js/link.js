@@ -14,7 +14,7 @@ window.addEventListener("load", function () {
         XHR.addEventListener("load", function(event) {
             // alert(event.target.responseText);
             var obj = JSON.parse(event.target.responseText);
-            documetn.getElementById("responseCopyButton").innerHTML = "<button onclick=\"copy()\">Copy URL</button>";
+            document.getElementById("responseCopyButton").innerHTML = "<button onclick=\"copy()\">Copy URL</button>";
             document.getElementById("response").innerHTML = _config.api.scheme + "://" + obj.url;
         });
 
