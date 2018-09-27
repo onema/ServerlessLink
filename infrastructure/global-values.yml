@@ -12,6 +12,12 @@ iamRoleStatements:
     Resource:
       - Fn::GetAtt: [ DynamoDBTable, Arn ]
       - Fn::Join: ["/", [ Fn::GetAtt: [DynamoDBTable, Arn], "index", "*"]]
+  - Effect: Allow
+    Action:
+      - sqs:SendMessageBatch
+      - sqs:SendMessage
+    Resource:
+      - Fn::ImportValue: "${self:custom.stageName}-dead-letter-queue-arn"
 
 environment:
   SNS_ERROR_TOPIC:
@@ -21,4 +27,4 @@ custom:
   stageName: ${opt:stage, self:provider.stage}
 
 deadLetterQueue:
-  Fn::ImportValue: "${self:custom.stageName}-error-topic-arn"
+  Fn::ImportValue: "${self:custom.stageName}-dead-letter-queue-arn"
