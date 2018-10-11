@@ -66,5 +66,6 @@ functions:
 
 # you can add CloudFormation resource templates here
 resources:
+  Mappings: ${file(infrastructure/link-resources_cfn.yml):Mappings}
   Parameters: ${file(infrastructure/link-resources_cfn.yml):Parameters}
   Resources: ${file(infrastructure/link-resources_cfn.yml):Resources}

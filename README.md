@@ -35,19 +35,23 @@ sbt assembly
 ```
 serverless deploy --domain <DOMAIN_NAME>
 ```
-The <DOMAIN_NAME> is the domain you will be using for your application. This will create a bucket with the given domain name. 
-You can create an alias `A` record in route 53 and point it to the bucket.
+The <DOMAIN_NAME> is the domain you will be using for your application. This will create a bucket with the given domain name
+and create two DNS Record Sets in Route 53, one for the website and another one for the API.
 
 Serverless will use the file `infrastructure/link-resources_cfn.yml` and generate the following resources:
 
 * Website Bucket (to place the application files)
 * DynamoDB table (where the link mappings are saved)
+* ACM certificate for the Website
 * ACM certificate for the API 
 * Domain Mapping for the API (the domain will be `m.<DOMAIN_NAME>`)
+* CloudFront distribution for the website
+* Record set entry in Route 53 for the website
+* Record set entry in Route 53 for the API
 
 > **IMPORTANT**:
 > 
-> The process will not finished until the ACM Certificate has been approved, the approval process requires a DNS entry, 
+> The process will not finished until the ACM Certificates have been approved, the approval process requires a DNS entry, 
 > you can see the instructions to add the DNS record in the [ACM](https://console.aws.amazon.com/acm/home?region=us-east-1#) control panel.  
 
 ### To push the code to the bucket use the following command
@@ -57,12 +61,13 @@ aws s3 cp ./public/ s3://<DOMAIN_NAME> --recursive
 ```
 
 ### DNS Setup
-Once you have properly setup the application you need to add two DNS records for your applicaiton and the API.
-In Route 53, create an `A` or `CNAME` record using an *Alias* for your bucket. This name must match the bucket name which 
-is named after the parameter that you passed to the serverless application above `<DOMAIN_NAME>`.
-
-The second is a `CNAME` record to the API Gateway named `m.<DOMAIN_NAME>`.
-
+You need a Route 53 hosted zone for the domain that you will be using in this project. This project assumes that 
+you will be using a second-level domain name e.g. `test.com` as this name is used to look up the Route 53 hosted zone.
+If you want to use a sub-domain e.g. link.test.com, you will need to modify the resources `WebsiteDomainRecordSet` and 
+ `ApiDomainRecordSet` in the `link-resources_cfn.yml` file to use the proper  `HostedZoneName` or `HostedZoneId`.
+ See [AWS::Route53::RecordSet][1] and [Alias Resource Record Set for a CloudFront Distribution][2] for more information
+[1]: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordset.html
+[2]: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/quickref-route53.html#w2ab1c17c23c81c11
 
 ## Application configuration
 The application needs a `config.js` file. You can copy the `public/js/dist.config.js` to `public/js/config.js`. At this time
