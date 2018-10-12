@@ -6,7 +6,7 @@ Serverless link is a Serverless URL Shortener build on [µServerless](https://gi
 and deployed using the [serverless framework](https://serverless.com).
 
 ## Demo
-**Checkout the [ServerlessLink](http://serverless.link) website for a demo!**
+**Checkout the [ServerlessLink](https://serverless.link) website for a demo!**
 
 ## Requirements
 1. java JDK `8+` ([download](https://www.java.com/en/download/))
@@ -24,6 +24,15 @@ docker run -it --rm -v $HOME/.aws/:/root/.aws/ -v $PWD:/root/app onema/userverle
 ```
 
 ## Setup
+### DNS Setup
+You need a Route 53 hosted zone for the domain that you will be using in this project. This project assumes that 
+you will be using a second-level domain name e.g. `test.com` as this name is used to look up the Route 53 hosted zone.
+If you want to use a sub-domain e.g. link.test.com, you will need to modify the resources `WebsiteDomainRecordSet` and 
+ `ApiDomainRecordSet` in the `link-resources_cfn.yml` file to use the proper  `HostedZoneName` or `HostedZoneId`.
+ See [AWS::Route53::RecordSet][1] and [Alias Resource Record Set for a CloudFront Distribution][2] for more information
+[1]: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordset.html
+[2]: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/quickref-route53.html#w2ab1c17c23c81c11
+
 ### Create the assembly
 
 ```bash
@@ -54,28 +63,15 @@ Serverless will use the file `infrastructure/link-resources_cfn.yml` and generat
 > The process will not finished until the ACM Certificates have been approved, the approval process requires a DNS entry, 
 > you can see the instructions to add the DNS record in the [ACM](https://console.aws.amazon.com/acm/home?region=us-east-1#) control panel.  
 
-### To push the code to the bucket use the following command
+### To push the website code to the bucket use the following command
 
 ```bash
 aws s3 cp ./public/ s3://<DOMAIN_NAME> --recursive
 ```
 
-### DNS Setup
-You need a Route 53 hosted zone for the domain that you will be using in this project. This project assumes that 
-you will be using a second-level domain name e.g. `test.com` as this name is used to look up the Route 53 hosted zone.
-If you want to use a sub-domain e.g. link.test.com, you will need to modify the resources `WebsiteDomainRecordSet` and 
- `ApiDomainRecordSet` in the `link-resources_cfn.yml` file to use the proper  `HostedZoneName` or `HostedZoneId`.
- See [AWS::Route53::RecordSet][1] and [Alias Resource Record Set for a CloudFront Distribution][2] for more information
-[1]: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordset.html
-[2]: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/quickref-route53.html#w2ab1c17c23c81c11
-
-## Application configuration
-The application needs a `config.js` file. You can copy the `public/js/dist.config.js` to `public/js/config.js`. At this time
-all you need to fill in is the name of the `invokeUrl` which is the URL of your API `m.<DOMAIN_NAME>`, and the scheme, this should be `https`.
-
-## Route 53 configuration 
-Once you have your API gateway and S3 buckets in place, you should create domains names in route 53 for your static website 
-(must match the domain name you gave to the serverless application) and  the api gateway domain.
+### Application configuration
+The application needs a `config.js` file. You can copy the `public/js/dist.config.js` to `public/js/config.js`. 
+All you need to fill in is the name of the `invokeUrl` which is the URL of your API `m.<DOMAIN_NAME>`, and the scheme, this should be `https`.
 
 ## Optional setup Build/Deploy service for your application
 I have included a cloud formation template `infrastructure/code-build-cicd_cfn.yml` to generate a CodeBuild service. 
