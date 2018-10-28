@@ -29,7 +29,7 @@ class CreateLogic(val dynamodbClient: AmazonDynamoDBAsync, val tableName: String
   }
 
   def testLink(link: String): Unit = {
-    Try(Source.fromURL(link)) match {
+    Try(new java.net.URL(link)) match {
       case Success(_) =>
       case Failure(_) => throw new HandleRequestException(HttpStatus.SC_BAD_REQUEST, s"The URL $link is not valid")
     }
