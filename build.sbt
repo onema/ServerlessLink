@@ -1,4 +1,4 @@
-resolvers += "Onema Snapshots" at "s3://s3-us-east-1.amazonaws.com/ones-deployment-bucket/snapshots"
+//resolvers += "Onema Snapshots" at "s3://s3-us-east-1.amazonaws.com/ones-deployment-bucket/snapshots"
 
 lazy val root = (project in file("."))
 .settings(
@@ -8,12 +8,12 @@ lazy val root = (project in file("."))
 
   version := "0.1.0",
 
-  scalaVersion := "2.12.6",
+  scalaVersion := "2.12.7",
 
   libraryDependencies ++= {
     Seq(
       // Serverless Base!
-      "io.onema"                  % "userverless_2.12"          % "0.0.10",
+      "io.onema"                  % "userverless-core_2.12"     % "0.0.1",
       "com.amazonaws"             % "aws-java-sdk-dynamodb"     % "1.11.408",
 
       // Logging
