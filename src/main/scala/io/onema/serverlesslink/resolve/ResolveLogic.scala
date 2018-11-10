@@ -5,6 +5,10 @@ import com.amazonaws.services.dynamodbv2.document.spec.QuerySpec
 import com.amazonaws.services.dynamodbv2.document.utils.ValueMap
 import com.amazonaws.services.dynamodbv2.document.{DynamoDB, Item}
 import com.typesafe.scalalogging.Logger
+import io.onema.userverless.exception.HandleRequestException
+import org.apache.http.HttpStatus
+
+import scala.util.{Failure, Success, Try}
 
 
 class ResolveLogic(val dynamodbClient: AmazonDynamoDBAsync, val tableName: String) {
@@ -25,6 +29,11 @@ class ResolveLogic(val dynamodbClient: AmazonDynamoDBAsync, val tableName: Strin
     val query = new QuerySpec()
       .withKeyConditionExpression("LinkId = :v_linkid")
       .withValueMap(new ValueMap().withString(":v_linkid", linkId))
-    table.query(query).iterator().next()
+    Try(table.query(query).iterator().next()) match {
+      case Success(item) => item
+      case Failure(_: NoSuchElementException) =>
+        throw new HandleRequestException(HttpStatus.SC_BAD_REQUEST, s"""Unable to find link with ID "$linkId" """)
+      case Failure(ex: Throwable) => throw ex
+    }
   }
 }
