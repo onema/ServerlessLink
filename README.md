@@ -70,7 +70,7 @@ aws s3 cp ./public/ s3://<DOMAIN_NAME> --recursive
 ```
 
 ### Application configuration
-The application needs a `config.js` file. You can copy the `public/js/dist.config.js` to `public/js/config.js`. 
+The application needs a `config.js` file. You can copy the `public/js/config.js.dist` to `public/js/config.js`. 
 All you need to fill in is the name of the `invokeUrl` which is the URL of your API `m.<DOMAIN_NAME>`, and the scheme, this should be `https`.
 
 ## Optional setup Build/Deploy service for your application

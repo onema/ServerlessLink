@@ -6,14 +6,14 @@ lazy val root = (project in file("."))
 
   name := "serverlesslink",
 
-  version := "0.2.0",
+  version := "0.3.0",
 
   scalaVersion := "2.12.7",
 
   libraryDependencies ++= {
     Seq(
       // Serverless Base!
-      "io.onema"                  % "userverless-core_2.12"     % "0.0.2",
+      "io.onema"                  % "userverless-core_2.12"     % "0.0.3",
       "com.amazonaws"             % "aws-java-sdk-dynamodb"     % "1.11.408",
 
       // Logging

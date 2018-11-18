@@ -1,7 +1,5 @@
 package io.onema.serverlesslink.create
 
-import java.net.UnknownHostException
-
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsync
 import com.amazonaws.services.dynamodbv2.model.{AttributeValue, PutItemResult}
 import com.typesafe.scalalogging.Logger
@@ -9,7 +7,6 @@ import io.onema.userverless.exception.HandleRequestException
 import org.apache.http.HttpStatus
 
 import scala.collection.JavaConverters._
-import scala.io.Source
 import scala.util.{Failure, Success, Try}
 
 
