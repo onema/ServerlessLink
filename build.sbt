@@ -13,7 +13,7 @@ lazy val root = (project in file("."))
   libraryDependencies ++= {
     Seq(
       // Serverless Base!
-      "io.onema"                  % "userverless-core_2.12"     % "0.0.3",
+      "io.onema"                  % "userverless-core_2.12"     % "0.1.0",
       "com.amazonaws"             % "aws-java-sdk-dynamodb"     % "1.11.408",
 
       // Logging

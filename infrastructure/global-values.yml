@@ -13,6 +13,12 @@ iamRoleStatements:
       - sqs:SendMessage
     Resource:
       - Fn::ImportValue: "${self:custom.stageName}-dead-letter-queue-arn"
+environment:
+  STAGE_NAME: ${self:custom.stageName}
+  APP_NAME: ${self:service}
+
+  # CUSTOM ENV VARS
+  CORS_SITES: "http://${opt:domain},https://${opt:domain}"
 
 custom:
   stageName: ${opt:stage, self:provider.stage}
