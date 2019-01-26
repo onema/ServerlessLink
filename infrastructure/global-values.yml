@@ -21,7 +21,4 @@ environment:
   CORS_SITES: "http://${opt:domain},https://${opt:domain}"
 
 custom:
-  stageName: ${opt:stage, self:provider.stage}
-
-deadLetterQueue:
-  Fn::ImportValue: "${self:custom.stageName}-dead-letter-queue-arn"
+  stageName: ${opt:stage-name, self:provider.stage}
