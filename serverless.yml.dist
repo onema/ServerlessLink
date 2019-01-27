@@ -7,19 +7,14 @@ provider:
   timeout: 30
   versionFunctions: false
   memorySize: 1024
-  stage: dev
+  stage: ${opt:stage, 'dev'}
   region: us-east-1
 
   # you can add statements to the Lambda function's IAM Role here
   iamRoleStatements: ${file(infrastructure/global-values.yml):iamRoleStatements}
 
   # Service wide environment variables
-  environment:
-    STAGE_NAME: ${self:custom.stageName}
-    CORS_SITES: "http://${opt:domain},https://${opt:domain}"
-
-    # The error topic is part of the bootstrap infrastructure for uServerless
-    SNS_ERROR_TOPIC: ${file(infrastructure/global-values.yml):environment.SNS_ERROR_TOPIC}
+  environment: ${file(infrastructure/global-values.yml):environment}
 
 # Custom values. These can be referenced in the Cloud Formation template
 custom: ${file(infrastructure/global-values.yml):custom}
@@ -33,36 +28,32 @@ package:
 functions:
   serverlesslink-resolve:
     handler: io.onema.serverlesslink.resolve.ResolveFunction::lambdaHandler
-    # the DLQ is part of the bootstrap infrastructure for uServerless
-    onError: ${file(infrastructure/global-values.yml):deadLetterQueue}
     environment:
       TABLE_NAME:
-        Ref: TableName
+        Ref: DynamoDBTable
     events:
       - http:
           path: /{id}
           method: get
-      - schedule:
-          rate: rate(2 minutes)
-          input:
-            warmup: true
+#      - schedule:
+#          rate: rate(2 minutes)
+#          input:
+#            warmup: true
 
   serverlesslink-create:
     handler: io.onema.serverlesslink.create.CreateFunction::lambdaHandler
-    # the DLQ is part of the bootstrap infrastructure for uServerless
-    onError: ${file(infrastructure/global-values.yml):deadLetterQueue}
     environment:
       TABLE_NAME:
-        Ref: TableName
+        Ref: DynamoDBTable
     events:
       - http:
           path: /
           method: post
           cors: true
-      - schedule:
-          rate: rate(2 minutes)
-          input:
-            warmup: true
+#      - schedule:
+#          rate: rate(2 minutes)
+#          input:
+#            warmup: true
 
 # you can add CloudFormation resource templates here
 resources:
